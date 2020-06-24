@@ -1,0 +1,88 @@
+package com.sample.rules
+
+import com.sample.*;
+
+ 
+rule "Los pacientes con problemas al corazon serán atendidos en Hospital Italiano"
+	when
+		recepcion: Recepcion( motivo.nombreMotivo == "INFARTO" || motivo.nombreMotivo == "TAQUICARDIA");
+		paciente: Paciente() from recepcion.getPaciente();
+	then
+		recepcion.getDespacho().setInstitucionDestino(DroolsTest.hospitalItaliano());
+		System.out.println( "La recepción número: " + recepcion.getNumeroRecepcion() + " para el paciente con nombre: "
+         + paciente.getNombrePaciente()+ " " + paciente.getApellidoPaciente() +
+		", será despachado al "+ recepcion.getDespacho().getInstitucionDestino().getNombre() +
+		 ", dado que fue diagnosticado con: "+ recepcion.getMotivo().getNombreMotivo());
+end
+
+rule "Los traslados sin importar el origen se realizarán todos al Hospital Central"
+	when
+		recepcion: Recepcion();
+		despacho: Despacho() from recepcion.getDespacho();
+		paciente: Paciente() from recepcion.getPaciente();
+		motivo: Motivo(codigoMotivo == Codigo.TRASLADO) from recepcion.getMotivo();
+	then
+		despacho.setInstitucionDestino(DroolsTest.hospitalCentral());
+		System.out.println( "La recepción número: " + recepcion.getNumeroRecepcion() +" " + "para el paciente con nombre: "+ paciente.getNombrePaciente()+
+		 " " + paciente.getApellidoPaciente() +", será despachada al "+ despacho.getInstitucionDestino().getNombre()+
+		 ", dado que fue diagnosticado con: "+ motivo.getNombreMotivo());
+end
+
+rule "Menores son despachados al Notti"
+	when
+		recepcion: Recepcion();
+		despacho: Despacho() from recepcion.getDespacho();
+		paciente: Paciente(edadPaciente < 15) from recepcion.getPaciente();
+	then
+		despacho.setInstitucionDestino(DroolsTest.hospitalNotti());
+        System.out.println( "La recepción número: " + recepcion.getNumeroRecepcion() +" para el menor con nombre: "
+         + paciente.getNombrePaciente()+ " " + paciente.getApellidoPaciente()+ 
+         ", será despachada al "+ despacho.getInstitucionDestino().getNombre()+" para su tratamiento." );
+end
+
+
+rule "Los despachos que NO sean gran mendoza iran al Scaravelli"
+	when
+		recepcion: Recepcion();
+		despacho: Despacho() from recepcion.getDespacho();
+		paciente: Paciente() from recepcion.getPaciente();
+		domicilio: Domicilio(localidad == Localidad.ALVEAR || localidad == Localidad.BOWEN || localidad == Localidad.TUNUYAN
+		 || localidad == Localidad.SAN_CARLOS || localidad == Localidad.TUPUNGATO) from recepcion.getDomicilio();
+		 motivo: Motivo(nombreMotivo != "QUEMADURAS") from recepcion.getMotivo();
+	then
+		despacho.setInstitucionDestino(DroolsTest.hospitalScaravelli());
+		despacho.setBase(DroolsTest.baseTunuyan());
+		System.out.println( "La recepción número: " + recepcion.getNumeroRecepcion() +" " + "para el paciente con nombre: "+ paciente.getNombrePaciente()+
+		 " " + paciente.getApellidoPaciente() +", será despachada al "+ despacho.getInstitucionDestino().getNombre());
+end
+
+rule "Los pacientes positivos de COVID-19 de zona Este seran derivados al perrupato"
+	when
+		recepcion: Recepcion();
+		despacho: Despacho() from recepcion.getDespacho();
+		paciente: Paciente() from recepcion.getPaciente();
+		domicilio: Domicilio(localidad == Localidad.SAN_MARTIN || localidad == Localidad.JUNIN|| localidad == Localidad.RIVADAVIA) from recepcion.getDomicilio();
+		motivo: Motivo(nombreMotivo == "COVID-19") from recepcion.getMotivo();
+	then
+		despacho.setInstitucionDestino(DroolsTest.hospitalPerrupato());
+		System.out.println( "La recepción número: " + recepcion.getNumeroRecepcion() +" " + "para el paciente con nombre: "+ paciente.getNombrePaciente()+
+		 " " + paciente.getApellidoPaciente() +", será despachada al "+ despacho.getInstitucionDestino().getNombre() +
+		 ", dado que fue diagnosticado con: "+ motivo.getNombreMotivo());
+end
+
+rule "Aquellos pacientes que hayan sufrido quemaduras seran atentidos en la clinica de cuyo"
+	when
+		recepcion: Recepcion();
+		despacho: Despacho() from recepcion.getDespacho();
+		paciente: Paciente() from recepcion.getPaciente();
+		motivo: Motivo(nombreMotivo == "QUEMADURAS") from recepcion.getMotivo();
+	then
+		despacho. setInstitucionDestino(DroolsTest.clinicaDeCuyo());
+		System.out.println( "La recepción número: " + recepcion.getNumeroRecepcion() +" " + "para el paciente con nombre: "+ paciente.getNombrePaciente()+
+		 " " + paciente.getApellidoPaciente() +", será despachada al "+ despacho.getInstitucionDestino().getNombre() +
+		 ", dado que fue diagnosticado con: "+ motivo.getNombreMotivo());
+end
+
+
+
+        
