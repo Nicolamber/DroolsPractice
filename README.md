@@ -13,4 +13,4 @@
 
 ## Console Output: 
  
-![alt text](https://github.com/Nicolamber/DroolsPractice/blob/master/ScreenShot/ConsoleOutput.png)
+![alt text](https://github.com/Nicolamber/DroolsPractice/blob/master/Emergencias/ScreenShot/ConsoleOutput.png)
