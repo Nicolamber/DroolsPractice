@@ -4,7 +4,7 @@
  ## Assumptions: 
   - Java JDK installed (java 8)
   - Eclipse or any other Java IDE.
-  - Latest Drools release installed.
+  - Latest Drools release [installed](https://github.com/Nicolamber/DroolsPractice/blob/master/files/1_instalacion_drools_V1_2020.pdf) (Installation guide).
  
 ## Run Project: 
  - Open Eclipse or another Java IDE.
