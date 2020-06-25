@@ -1,9 +1,13 @@
 package com.sample;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import org.drools.core.event.DebugAgendaEventListener;
+import org.drools.core.event.DebugRuleRuntimeEventListener;
 import org.kie.api.KieServices;
+import org.kie.api.logger.KieRuntimeLogger;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
@@ -18,7 +22,13 @@ public class DroolsTest {
 	        KieServices ks = KieServices.Factory.get();
     	    KieContainer kContainer = ks.getKieClasspathContainer();
         	KieSession kSession = kContainer.newKieSession("ksession-rules");
+        	kSession.addEventListener( new DebugAgendaEventListener() );
+			kSession.addEventListener( new DebugRuleRuntimeEventListener() );
 
+			// To setup a file based audit logger, uncomment the next line
+			KieRuntimeLogger logger = ks.getLoggers().newFileLogger( kSession, "./helloworld" );
+			
+			
         	Order silverOrder = getOrderWithSilverCustomer();
             kSession.insert(silverOrder);
             kSession.fireAllRules();
@@ -27,10 +37,13 @@ public class DroolsTest {
             kSession.insert(goldOrder);
             kSession.fireAllRules();
             
-            Order tenProductsOrder = getOrderWithGoldCustomerAndTenProducts();
+            Order tenProductsOrder = getOrderWithGoldCustomerAndTenProductsInSeptember();
             kSession.insert(tenProductsOrder);
             kSession.fireAllRules();
 
+           
+            logger.close();
+            
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -39,18 +52,30 @@ public class DroolsTest {
     private static Order getOrderWithDefaultCustomer() {
 		final Order order = new Order(getDefaultCustomer());
 		order.addProduct(getProduct1());
+		order.setMonth(Month.AGOSTO);
 		return order;
 	}
  
 	private static Order getOrderWithSilverCustomer() {
 		final Order order = new Order(getSilverCustomer());
 		order.addProduct(getProduct1());
+		order.setMonth(Month.SEPTIEMBRE);
 		return order;
 	}
  
 	private static Order getOrderWithGoldCustomer() {
 		final Order order = new Order(getGoldCustomer());
 		order.addProduct(getProduct1());
+		order.setMonth(Month.MARZO);
+		return order;
+	}
+	
+	private static Order getOrderWithGoldCustomerAndTenProductsInSeptember() {
+		final Order order = new Order(getGoldCustomer());
+		for (int i = 0; i < 11; i++) {
+			order.addProduct(getProduct1());
+		}
+		order.setMonth(Month.SEPTIEMBRE);
 		return order;
 	}
  
@@ -59,6 +84,8 @@ public class DroolsTest {
 		for (int i = 0; i < 11; i++) {
 			order.addProduct(getProduct1());
 		}
+
+		order.setMonth(Month.DICIEMBRE);
 		return order;
 	}
  

@@ -1,5 +1,6 @@
 package com.sample;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
  
@@ -10,6 +11,8 @@ public class Order {
 	private List<Product> products;
 	
 	private double totalPrice;
+	
+	private Month month;
 
 	public Order(Customer customer) {
 		super();
@@ -46,5 +49,14 @@ public class Order {
 	public void setTotalPrice(double totalPrice) {
 		this.totalPrice = totalPrice;
 	}
+
+	public Month getMonth() {
+		return month;
+	}
+
+	public void setMonth(Month month) {
+		this.month = month;
+	}
+
 	
 }
