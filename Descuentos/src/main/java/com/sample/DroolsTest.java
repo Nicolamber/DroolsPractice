@@ -81,11 +81,10 @@ public class DroolsTest {
  
 	private static Order getOrderWithGoldCustomerAndTenProducts() {
 		final Order order = new Order(getGoldCustomer());
-		for (int i = 0; i < 11; i++) {
+		order.setMonth(Month.DICIEMBRE);
+		for (int i = 0; i < 15; i++) {
 			order.addProduct(getProduct1());
 		}
-
-		order.setMonth(Month.DICIEMBRE);
 		return order;
 	}
  

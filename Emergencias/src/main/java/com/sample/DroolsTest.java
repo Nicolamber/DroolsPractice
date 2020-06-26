@@ -30,13 +30,11 @@ public class DroolsTest {
         	// Prueba con paciente con problemas cardíacos
         	crearPacienteCardiaco(kSession);
         	
-        	
         	//Prueba con paciente menor a 15 años para derivación Notti
         	crearMenorEdad(kSession);
         	
         	//Paciente Codigo Rojo o Amarillo distinto de infarto
         	crearCodigoRojoOAmarillo(kSession);
-        	
         	
         	//Paciente con COVID-19
         	crearPacienteCovid(kSession);
@@ -96,8 +94,8 @@ public class DroolsTest {
     public static void crearMenorEdad(KieSession kSession) {
     	
     	Paciente pacienteThiago = pacienteThiagoMessi();
-    	Motivo motivoThiago = motivo6();
-    	Domicilio domicilioThiago = new Domicilio("Patricias Mendocinas",742, Localidad.CAPITAL);
+    	Motivo motivoThiago = motivo3();
+    	Domicilio domicilioThiago = new Domicilio("Patricias Mendocinas",742, Localidad.JUNIN);
     	Despacho despachoThiago = new Despacho();
     	despachoThiago.setFechaHora(LocalDateTime.parse("2020-06-15T05:12:00"));
     	
